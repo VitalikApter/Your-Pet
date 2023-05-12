@@ -16,8 +16,7 @@ router.post("/users/register", validateBody(schemas.registerSchema), ctrl.regist
 // signin
 router.post("/users/login", validateBody(schemas.loginSchema), ctrl.login);
 
-router.get("/auth/verify/:verificationToken", ctrl.verify);
-router.post("/resend-verify-email", validateBody(schemas.emailSchema), ctrl.resendVerifyEmail)
+
 
 
 
