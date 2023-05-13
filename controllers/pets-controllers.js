@@ -28,7 +28,6 @@ const deleteUserPet = async (req, res) => {
     };
 };
 
-
 module.exports = {
     addUserPet: ctrlWrapper(addUserPet),
     deleteUserPet: ctrlWrapper(deleteUserPet),

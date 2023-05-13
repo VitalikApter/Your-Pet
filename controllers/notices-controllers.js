@@ -9,9 +9,43 @@ const addNotice = async (req, res) => {
       throw HttpError(409, "This title already added");
     }
     else {
-    const result = await Notice.create({...req.body});
+    const {_id: ownerNotice} = req.user;
+    const result = await Notice.create({...req.body, ownerNotice});
     res.status(201).json(result);
     }
+};
+
+const getNoticeById = async (req, res) => {
+  const {id: idNotice} = req.params;
+  const result = await Notice.findById(idNotice)
+  if (!result) {
+    throw HttpError(404, "Not Found");
+  }
+  res.json(result);
+};
+
+const getNoticesСreatedByUser = async (req, res) => {
+  const {id: ownerNotice} = req.user;
+  const result = await Notice.find({ownerNotice: ownerNotice});
+  if (JSON.stringify(result) === "[]") {
+    throw HttpError(404, "Not Found");
+  }
+  else{
+    res.status(200).json(result);
+  }
+};
+
+const deleteNoticeCreatedByUser = async (req, res) => {
+  const { id: idNotice} = req.params;
+  const { id: ownerNotice} = req.user;
+  const response = await Notice.findOneAndRemove({_id: idNotice, ownerNotice: ownerNotice});
+  console.log(response);
+  if(response === null){
+    throw HttpError(404, "Not Found");
+  }
+  else {
+  res.status(200).json({"message": "contact deleted"});
+  };
 };
 
 const getNoticesByCategory = async (req, res) => {
@@ -36,23 +70,12 @@ const getNoticesByTitle = async (req, res) => {
     res.status(200).json(result);
 };
 
-const getNoticeById = async (req, res) => {
-    const {id: idNotice} = req.params;
-    const result = await Notice.findById(idNotice)
-    if (!result) {
-      throw HttpError(404, "Not Found");
-    }
-    res.json(result);
-};
-
-const getNoticesByUser = async (req, res) => {
-    
-};
 
 module.exports = {
     addNotice: ctrlWrapper(addNotice),
     getNoticesByCategory: ctrlWrapper(getNoticesByCategory),
     getNoticesByTitle: ctrlWrapper(getNoticesByTitle),
     getNoticeById: ctrlWrapper(getNoticeById),
-    getNoticesByUser: ctrlWrapper(getNoticesByUser),
-  };
+    getNoticesСreatedByUser: ctrlWrapper(getNoticesСreatedByUser),
+    deleteNoticeCreatedByUser: ctrlWrapper(deleteNoticeCreatedByUser),
+};
