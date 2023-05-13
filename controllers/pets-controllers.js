@@ -9,14 +9,17 @@ const addUserPet = async (req, res) => {
       throw HttpError(409, "This pet allready added");
     }
     else {
-    const result = await UserPet.create({...req.body});
+    const {_id: ownerPet} = req.user;
+    const result = await UserPet.create({...req.body, ownerPet});
     res.status(201).json(result);
     }
 };
 
 const deleteUserPet = async (req, res) => {
+    console.log(req.user);
+    const {_id: ownerPet} = req.user;
     const { _id: userPetId} = req.params;
-    const response = await UserPet.findOneAndRemove({userPetId});
+    const response = await UserPet.findOneAndRemove({userPetId, ownerPet});
     if(response === null){
       throw HttpError(404, "Not found");
     }
