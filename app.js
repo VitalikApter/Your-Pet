@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const authRouter = require('././routes/api/auth-routes');
 const contactsRouter = require("./routes/api/contacts-routes");
+const userPetRouter = require("./routes/api/userPets-routes");
+const noticeRouter = require("././routes/api/notices-routes");
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use(express.static('public'))
 
 app.use('/api/auth', authRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/user/pets", userPetRouter);
+app.use("/api/notices", noticeRouter);
 
 
 app.use((req, res) => {
