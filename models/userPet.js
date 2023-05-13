@@ -25,6 +25,11 @@ const userPetSchema = Schema({
       type: String,
       default: "",
     },
+    ownerPet: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    }
 }, {versionKey: false});
 
 userPetSchema.post("save", handleMongooseError);
