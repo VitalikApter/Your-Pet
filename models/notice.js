@@ -37,6 +37,11 @@ const noticeSchema = Schema({
       type: String,
       default: "",
     },
+    ownerNotice: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
 }, {versionKey: false});
 
 noticeSchema.post("save", handleMongooseError);
