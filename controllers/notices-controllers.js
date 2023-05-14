@@ -1,12 +1,13 @@
 const { ctrlWrapper } = require("../utils");
 const { Notice } = require("../models/notice");
 const { HttpError } = require("../helpers");
+const { User } = require("../models/user");
 
 const addNotice = async (req, res) => {
     const {title}  = req.body;
     const nameCheck = await Notice.findOne({title: title});
     if(nameCheck) {
-      throw HttpError(409, "This title already added");
+      throw HttpError(409, "This title is already added");
     }
     else {
     const {_id: ownerNotice} = req.user;
@@ -49,8 +50,10 @@ const deleteNoticeCreatedByUser = async (req, res) => {
 };
 
 const getNoticesByCategory = async (req, res) => {
-    // %20
-    // %2F
+    // sell = sell
+    // in good hands = in%20good%20hands - пробел = %20
+    // lost/found = lost%2Ffound - слєш = %2F
+    // ?category=
     const { category: categoryNotice } = req.query;
     const result = await Notice.find({category: categoryNotice});
     if (JSON.stringify(result) === "[]") {
@@ -62,6 +65,7 @@ const getNoticesByCategory = async (req, res) => {
 };
 
 const getNoticesByTitle = async (req, res) => {
+    // /search?title=
     const { title: titleNotice } = req.query;
     const result = await Notice.find({title: titleNotice})
     if (JSON.stringify(result) === "[]") {
@@ -70,6 +74,43 @@ const getNoticesByTitle = async (req, res) => {
     res.status(200).json(result);
 };
 
+const addNoticeToFavorite = async (req, res) => {
+  const { id: idNotice} = req.params;
+  const { _id } = req.user;
+  const idNoticeCheck = await Notice.findById(idNotice);
+    if (!idNoticeCheck) {
+    throw HttpError(404, `Not found`);
+  }
+  const favoriteCheck = await User.find({_id: _id, favorite: idNotice});
+  if(Object.keys(favoriteCheck).length === 0){
+    await User.findByIdAndUpdate(_id, {$push: { favorite: idNotice }});
+    const result = await User.findById(_id)
+    res.status(201).json(result);
+  }
+  throw HttpError(409, "This notice is already added to favorite");
+};
+
+const getNoticesAddedToFavoriteByUser = async (req, res) => {
+  const { _id } = req.user;
+  const result = await User.findById({_id});
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.status(200).json(result.favorite)
+};
+
+const deleteNoticeFromFavorite = async (req, res) => {
+  const { id: idNotice} = req.params;
+  const { _id } = req.user;
+  const result = await User.findById({_id});
+  const favoriteData = result.favorite;
+  if(!favoriteData.includes(idNotice)){
+    throw HttpError(404, `Not found`);
+  }
+  await User.findByIdAndUpdate(_id, {$pull: { favorite: idNotice }});
+  const updatedFavoriteData = await User.findById({_id});
+  res.status(200).json(updatedFavoriteData)
+};
 
 module.exports = {
     addNotice: ctrlWrapper(addNotice),
@@ -78,4 +119,7 @@ module.exports = {
     getNoticeById: ctrlWrapper(getNoticeById),
     getNoticesСreatedByUser: ctrlWrapper(getNoticesСreatedByUser),
     deleteNoticeCreatedByUser: ctrlWrapper(deleteNoticeCreatedByUser),
+    addNoticeToFavorite: ctrlWrapper(addNoticeToFavorite),
+    getNoticesAddedToFavoriteByUser: ctrlWrapper(getNoticesAddedToFavoriteByUser),
+    deleteNoticeFromFavorite: ctrlWrapper(deleteNoticeFromFavorite),
 };

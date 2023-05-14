@@ -35,6 +35,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  favorite: {
+    type: Array,
+    default: [],
+  }
 });
 
 userSchema.post("save", handleMongooseError);
