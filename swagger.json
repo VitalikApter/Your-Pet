@@ -310,7 +310,6 @@
       },
       "SearchNoticeRequest": {
         "type": "string",
-        "example": "qwerty123",
         "required": ["title"],
         "properties": {
           "title": {
