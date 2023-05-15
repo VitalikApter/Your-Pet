@@ -1,5 +1,7 @@
 const express = require("express");
 
+
+
 const ctrl = require("../../controllers/auth-controllers");
 
 const { validateBody } = require("../../utils");
@@ -30,5 +32,7 @@ router.patch(
   upload.single("avatar"),
   ctrl.updateAvatar
 );
+
+
 
 module.exports = router;

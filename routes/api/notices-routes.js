@@ -20,5 +20,5 @@ router.get("/:id", isValidId, ctrl.getNoticeById);
 router.delete("/removenoticefromfavorite/:id", authenticate, isValidId, ctrl.deleteNoticeFromFavorite);
 router.delete("/:id", authenticate, ctrl.deleteNoticeCreatedByUser);
 router.post("/addnoticetofavorite/:id", authenticate, isValidId, ctrl.addNoticeToFavorite);
-
+router.post("/")
 module.exports = router;
