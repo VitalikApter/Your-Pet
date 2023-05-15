@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000/api" }],
+  "servers": [{ "url": "http://localhost:3000/api" }, {"url": "https://your-pet.onrender.com/api"}],
   "tags": [
     {
       "name": "Auth",
@@ -84,8 +84,13 @@
           "401": {
             "description": "Email or password invalid",
             "content": {}
+          },
+          "200": {
+            "description": "Login success",
+            "content": {}
           }
         }
+        
       }
     },
     "/auth/users/logout": {
@@ -182,7 +187,37 @@
               }
             }
           }
-    }
+    },
+    "/notices/": {
+        "get": {
+          "tags": ["Notices"],
+          "summary": "Notices by Categories",
+          "parameters": [],
+          "security": [{ "Bearer": [] }],
+          "requestBody": {
+            "description": "Notices array",
+            "required": true
+          
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NoticesCategoriesResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {}
+            }
+          }
+        }
+      },
+      "/userfavoritenotices": {}
 
   },
 
@@ -314,7 +349,7 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "Saerch Notices "
+            "description": "Search Notices "
           }
           
         }
@@ -379,6 +414,47 @@
             "type": "string",
             "description": "User's id"
           }
+        }
+      },
+      "NoticesCategoriesResponse": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "category": {
+                  "type": "string",
+                  "description": "Category of Notices-pet",
+                  "format": "string"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of Notice"
+                },
+                "namePet": {
+                  "type": "string",
+                  "description": "Name of Pet"
+                },
+                "dateOfBirth": {
+                  "type": "string",
+                  "description": "Pet's Date of Birth"
+                },
+                "breed": {
+                  "type": "string",
+                  "description": "Pet breed"
+                },
+                "sex": {
+                  "type": "string",
+                  "description": "Sex of the Pet "
+                },
+                "location": {
+                  "type": "string",
+                  "description": "Location of Notice "
+                },
+                "comments": {
+                  "type": "string",
+                  "description": "Comments of Notice "
+                }
+              }
         }
       }
     },
