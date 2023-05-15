@@ -37,6 +37,10 @@ const noticeSchema = Schema({
       type: String,
       default: "",
     },
+    price: {
+      type: String,
+      default: "",
+    },
     ownerNotice: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -69,6 +73,7 @@ const addNotice = Joi.object({
         "any.required": "missing required field - Location",
     }),
     comments: Joi.string(),
+    price: Joi.string(),
 });
 
 
