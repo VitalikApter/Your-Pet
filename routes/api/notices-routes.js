@@ -4,9 +4,14 @@ const router = express.Router();
 const { validateBody } = require("../../utils");
 const { NoticeSchemas } = require("../../models/notice");
 const { isValidId } = require("../../middlewares");
-const {authenticate}  = require("../../middlewares");
+const { authenticate } = require("../../middlewares");
 
-router.post("/addnotice", authenticate, validateBody(NoticeSchemas.addNotice), ctrl.addNotice);
+router.post(
+  "/addnotice",
+  authenticate,
+  validateBody(NoticeSchemas.addNotice),
+  ctrl.addNotice
+);
 router.get("/search/", ctrl.getNoticesByTitle);
 router.get("/", ctrl.getNoticesByCategory);
 router.get("/mynotices", authenticate, ctrl.getNoticesСreatedByUser);

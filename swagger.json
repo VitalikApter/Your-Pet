@@ -1,0 +1,395 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "2.0.2",
+    "title": "Swagger test",
+    "description": "Showing off swagger-ui-express"
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000/api" }],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Notices",
+      "description": "Notices endpoints"
+    },
+    {
+      "name": "Pets",
+      "description": "Pets endpoints"
+    }
+  ],
+
+  "paths": {
+    "/auth/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email and password are required",
+            "content": {}
+          },
+          "409": {
+            "description": "Email in use",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Email or password invalid",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Logout object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LogoutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logout success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/addnotice": {
+      "post": {
+        "tags": ["Notices"],
+        "summary": "Add Notice",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Notices object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticeResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This title already added",
+            "content": {}
+          }
+        }
+      }
+    },
+    "notices//search/": {
+        "get": {
+            "tags": ["Notices"],
+            "summary": "Search Notice",
+            "parameters": [],
+            "security": [{ "Bearer": [] }],
+            "requestBody": {
+              "description": "Saerch Notices ",
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/SearchNoticeRequest"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Successful operation",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/SearchNoticeResponse"
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Not Found",
+                "content": {}
+              }
+            }
+          }
+    }
+
+  },
+
+  "components": {
+    "schemas": {
+      "NoticeRequest": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "namePet",
+          "dateOfBirth",
+          "breed",
+          "sex",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of Notice "
+          }
+        }
+      },
+      "NoticeResponse": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "namePet",
+          "dateOfBirth",
+          "breed",
+          "sex",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of Notice "
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Users token"
+          }
+        }
+      },
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "SearchNoticeRequest": {
+        "type": "string",
+        "example": "qwerty123",
+        "required": ["title"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Saerch Notices "
+          }
+          
+        }
+      },
+      "SearchNoticeResponse": {
+        "type": "object",
+        "required": [
+            "category",
+            "title",
+            "namePet",
+            "dateOfBirth",
+            "breed",
+            "sex",
+            "location"
+          ],
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Category of Notices-pet",
+              "format": "string"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of Notice"
+            },
+            "namePet": {
+              "type": "string",
+              "description": "Name of Pet"
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "description": "Pet's Date of Birth"
+            },
+            "breed": {
+              "type": "string",
+              "description": "Pet breed"
+            },
+            "sex": {
+              "type": "string",
+              "description": "Sex of the Pet "
+            },
+            "location": {
+              "type": "string",
+              "description": "Location of Notice "
+            },
+            "comments": {
+              "type": "string",
+              "description": "Comments of Notice "
+            }
+          }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's id"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
