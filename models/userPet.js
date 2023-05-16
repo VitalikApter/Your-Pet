@@ -29,12 +29,15 @@ const userPetSchema = Schema({
       type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
-    }
+    },
+    petAvatar: {
+      type: String,
+    },
 }, {versionKey: false});
 
 userPetSchema.post("save", handleMongooseError);
 
-const addUserPet = Joi.object({
+const addUserPetValidation = Joi.object({
     namePet: Joi.string().required().messages({
       "any.required": "missing required field - Name Pet",
     }),
@@ -48,16 +51,14 @@ const addUserPet = Joi.object({
       "any.required": "missing required field - Category", 
     }),
     comments: Joi.string(),
+    file: Joi.object(),
 });
 
-const UserPetSchemas = {
-    addUserPet,
-  };
 
 const UserPet = model("user-pets", userPetSchema);
 
 module.exports = {
     UserPet,
-    UserPetSchemas,
+    addUserPetValidation,
   };
   

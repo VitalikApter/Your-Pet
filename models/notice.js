@@ -46,11 +46,14 @@ const noticeSchema = Schema({
       ref: "user",
       required: true,
     },
+    noticeAvatar: {
+      type: String,
+    },
 }, {versionKey: false});
 
 noticeSchema.post("save", handleMongooseError);
 
-const addNotice = Joi.object({
+const addNoticeValidation = Joi.object({
     category: Joi.string().required().messages({
         "any.required": "missing required field - Category",
     }),
@@ -76,14 +79,9 @@ const addNotice = Joi.object({
     price: Joi.string(),
 });
 
-
-const NoticeSchemas = {
-    addNotice,
-};
-
 const Notice = model("notices", noticeSchema);
 
 module.exports = {
     Notice,
-    NoticeSchemas,
+    addNoticeValidation,
   };
