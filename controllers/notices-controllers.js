@@ -2,8 +2,17 @@ const { ctrlWrapper } = require("../utils");
 const { Notice } = require("../models/notice");
 const { HttpError } = require("../helpers");
 const { User } = require("../models/user");
+const { addNoticeValidation } = require("../models/notice");
 
 const addNotice = async (req, res) => {
+    const {error} = addNoticeValidation.validate(req.body);
+    if(error) {
+      return res.status(400).json({"message": error.message});
+    };
+    const maxSizeOfAvatar = 3145728;
+    if(req.file.size > maxSizeOfAvatar){
+      return res.status(400).json({"message": "Uploaded file is too big"});
+    }
     const {title}  = req.body;
     const nameCheck = await Notice.findOne({title: title});
     if(nameCheck) {
@@ -11,7 +20,7 @@ const addNotice = async (req, res) => {
     }
     else {
     const {_id: ownerNotice} = req.user;
-    const result = await Notice.create({...req.body, ownerNotice});
+    const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path});
     res.status(201).json(result);
     }
 };

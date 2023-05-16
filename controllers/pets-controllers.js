@@ -1,8 +1,17 @@
 const { ctrlWrapper } = require("../utils");
 const { UserPet } = require("../models/userPet");
 const { HttpError } = require("../helpers");
+const { addUserPetValidation } = require("../models/userPet");
 
 const addUserPet = async (req, res) => {
+    const {error} = addUserPetValidation.validate(req.body);
+    if(error) {
+      return res.status(400).json({"message": error.message});
+    };
+    const maxSizeOfAvatar = 3145728;
+    if(req.file.size > maxSizeOfAvatar){
+      return res.status(400).json({"message": "Uploaded file is too big"});
+    }
     const {namePet}  = req.body;
     const nameCheck = await UserPet.findOne({namePet});
     if(nameCheck) {
@@ -10,7 +19,7 @@ const addUserPet = async (req, res) => {
     }
     else {
     const {_id: ownerPet} = req.user;
-    const result = await UserPet.create({...req.body, ownerPet});
+    const result = await UserPet.create({...req.body, ownerPet, petAvatar: req.file.path});
     res.status(201).json(result);
     }
 };
@@ -31,4 +40,4 @@ const deleteUserPet = async (req, res) => {
 module.exports = {
     addUserPet: ctrlWrapper(addUserPet),
     deleteUserPet: ctrlWrapper(deleteUserPet),
-  };
+};
