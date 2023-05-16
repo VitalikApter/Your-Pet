@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000/api" }],
+  "servers": [{ "url": "https://your-pet.onrender.com/api" }],
   "tags": [
     {
       "name": "Auth",
@@ -84,6 +84,10 @@
           "401": {
             "description": "Email or password invalid",
             "content": {}
+          },
+          "200": {
+            "description": "Login success",
+            "content": {}
           }
         }
       }
@@ -123,7 +127,7 @@
           "description": "Notices object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/NoticeRequest"
               }
@@ -148,42 +152,265 @@
         }
       }
     },
-    "notices//search/": {
-        "get": {
-            "tags": ["Notices"],
-            "summary": "Search Notice",
-            "parameters": [],
-            "security": [{ "Bearer": [] }],
-            "requestBody": {
-              "description": "Saerch Notices ",
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/SearchNoticeRequest"
-                  }
-                }
-              }
-            },
-            "responses": {
-              "200": {
-                "description": "Successful operation",
-                "content": {
-                  "application/json": {
-                    "schema": {
-                      "$ref": "#/components/schemas/SearchNoticeResponse"
-                    }
-                  }
-                }
-              },
-              "404": {
-                "description": "Not Found",
-                "content": {}
+    "notices/search?title=": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Search Notice",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Saerch Notices ",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchNoticeRequest"
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchNoticeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Notices by Categories sell = sell ,in good hands = in%20good%20hands - пробел = %20, lost/found = lost%2Ffound - слєш = %2F,?category= ",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Notices array",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesCategoriesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/userfavoritenotices": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Notices by UserFavorites",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "User's id",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesbyUserFavoritesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/mynotices": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Notices Created By User",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Id of notice",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticesCreatedByUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticesCreatedByUserResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:id": {
+      "get": {
+        "tags": ["Notices"],
+        "summary": "Notice by id",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Id of notice",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoticeByIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoticeByIdResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/removenoticefromfavorite/:id": {
+      "delete": {
+        "tags": ["Notices"],
+        "summary": "Delete favorite Notice by id",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Id of notice",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteFavoriteNoticeByIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delete is Successful ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteFavoriteNoticeByIdResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "notices/removeuserpet/:id": {
+      "delete": {
+        "tags": ["Notices"],
+        "summary": "Delete Notice CreatedByUser",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "id: idNotice, id: ownerNotice ",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/deleteuserpetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "contact deleted "
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/addnoticetofavorite/:id": {
+      "post": {
+        "tags": ["Notices"],
+        "summary": "Add Notice To Favorite",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Notices object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddNoticeToFavoriteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddNoticeToFavoriteResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This notice is already added to favorite",
+            "content": {}
+          }
+        }
+      }
     }
-
   },
 
   "components": {
@@ -282,13 +509,18 @@
           }
         }
       },
-      "LoginResponse": {
+      "LoginRequest": {
         "type": "object",
-
         "properties": {
-          "token": {
+          "email": {
             "type": "string",
-            "description": "Users token"
+            "description": "Users emeil",
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Users password",
+            "example": "qwerty123"
           }
         }
       },
@@ -314,22 +546,76 @@
         "properties": {
           "title": {
             "type": "string",
-            "description": "Saerch Notices "
+            "description": "Search Notices "
           }
-          
         }
       },
       "SearchNoticeResponse": {
         "type": "object",
         "required": [
-            "category",
-            "title",
-            "namePet",
-            "dateOfBirth",
-            "breed",
-            "sex",
-            "location"
-          ],
+          "category",
+          "title",
+          "namePet",
+          "dateOfBirth",
+          "breed",
+          "sex",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of Notice "
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's id"
+          }
+        }
+      },
+      "NoticesCategoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
           "properties": {
             "category": {
               "type": "string",
@@ -365,19 +651,334 @@
               "description": "Comments of Notice "
             }
           }
+        }
       },
-      "RegistrationResponse": {
-        "type": "object",
-        "required": ["email"],
+      "NoticesbyUserFavoritesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Favorite Notices-pet By User",
+              "format": "string"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of Notice"
+            },
+            "namePet": {
+              "type": "string",
+              "description": "Name of Pet"
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "description": "Pet's Date of Birth"
+            },
+            "breed": {
+              "type": "string",
+              "description": "Pet breed"
+            },
+            "sex": {
+              "type": "string",
+              "description": "Sex of the Pet "
+            },
+            "location": {
+              "type": "string",
+              "description": "Location of Notice "
+            },
+            "comments": {
+              "type": "string",
+              "description": "Comments of Notice "
+            }
+          }
+        }
+      },
+      "NoticesCreatedByUserRequest": {
+        "type": "string",
+        "required": ["ownerNotice"],
         "properties": {
+          "ownerNotice": {
+            "type": "string",
+            "description": "User_id"
+          }
+        }
+      },
+      "NoticesCreatedByUserResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Favorite Notices-pet By User",
+              "format": "string"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of Notice"
+            },
+            "namePet": {
+              "type": "string",
+              "description": "Name of Pet"
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "description": "Pet's Date of Birth"
+            },
+            "breed": {
+              "type": "string",
+              "description": "Pet breed"
+            },
+            "sex": {
+              "type": "string",
+              "description": "Sex of the Pet "
+            },
+            "location": {
+              "type": "string",
+              "description": "Location of Notice "
+            },
+            "comments": {
+              "type": "string",
+              "description": "Comments of Notice "
+            },
+            "ownerNotice": {
+              "type": "string",
+              "description": "User_id"
+            }
+          }
+        }
+      },
+      "NoticeByIdRequest": {
+        "type": "string",
+        "required": ["idNotice"],
+        "properties": {
+          "idNotice": {
+            "type": "string",
+            "description": "idNotice"
+          }
+        }
+      },
+      "NoticeByIdResponse": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "namePet",
+          "dateOfBirth",
+          "breed",
+          "sex",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of Notice "
+          }
+        }
+      },
+      "DeleteFavoriteNoticeByIdRequest": {
+        "type": "string",
+        "required": ["idNotice, User_id"],
+        "properties": {
+          "idNotice": {
+            "type": "string",
+            "description": "idNotice"
+          },
+          "User_id": {
+            "type": "string",
+            "description": "User_id"
+          }
+        }
+      },
+      "DeleteFavoriteNoticeByIdResponse": {
+        "type": "object",
+        "required": [
+          "name",
+          "password",
+          "email",
+          "Birthday",
+          "Phone",
+          "City",
+          "avatarURL",
+          "favorite"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User Name",
+            "format": "string"
+          },
           "email": {
             "type": "string",
             "description": "User's email",
             "format": "email"
           },
-          "id": {
+          "Birthday": {
             "type": "string",
-            "description": "User's id"
+            "description": "User's Birthday"
+          },
+          "Phone": {
+            "type": "string",
+            "description": "User's Phone"
+          },
+          "City": {
+            "type": "string",
+            "description": "User's Location"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's Avatar URL "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "favorite": {
+            "type": "array",
+            "description": "User's Changed Favorite Notices "
+          }
+        }
+      },
+      "deleteuserpetRequest": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "idNotice": {
+              "type": "string",
+              "description": "Notices's Id",
+              "format": "string"
+            },
+            "ownerNotice": {
+              "type": "string",
+              "description": "Id User's Notice"
+            }
+          }
+        }
+      },
+      "AddNoticeToFavoriteRequest": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "namePet",
+          "dateOfBirth",
+          "breed",
+          "sex",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of Notice "
+          }
+        }
+      },
+      "AddNoticeToFavoriteResponse": {
+        "type": "object",
+        "required": [
+          "name",
+          "password",
+          "email",
+          "Birthday",
+          "Phone",
+          "City",
+          "avatarURL",
+          "favorite"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User Name",
+            "format": "string"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "Birthday": {
+            "type": "string",
+            "description": "User's Birthday"
+          },
+          "Phone": {
+            "type": "string",
+            "description": "User's Phone"
+          },
+          "City": {
+            "type": "string",
+            "description": "User's Location"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's Avatar URL "
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of Notice "
+          },
+          "favorite": {
+            "type": "array",
+            "description": "User's Changed Favorite Notices "
           }
         }
       }
