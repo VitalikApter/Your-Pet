@@ -22,7 +22,7 @@ const userSchema = new Schema({
   },
   Phone: {
     type: String,
-    
+    default: "380000000"
   },
   City: {
     type: String,
@@ -45,7 +45,7 @@ const addSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   Birthday: Joi.string(),
-  phone: Joi.string(),
+  Phone: Joi.string(),
   City: Joi.string(),
   favorite: Joi.boolean(),
 });

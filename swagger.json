@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://your-pet.onrender.com/api" }],
+  "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
   "tags": [
     {
       "name": "Auth",
