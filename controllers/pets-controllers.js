@@ -37,7 +37,17 @@ const deleteUserPet = async (req, res) => {
     };
 };
 
+// Test
+const getAllUserPets = async (req, res) => {
+  const result = await UserPet.find({category: "your pet"})
+  if(!result){
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json(result)
+};
+
 module.exports = {
     addUserPet: ctrlWrapper(addUserPet),
     deleteUserPet: ctrlWrapper(deleteUserPet),
+    getAllUserPets: ctrlWrapper(getAllUserPets),
 };
