@@ -33,7 +33,7 @@ const deleteUserPet = async (req, res) => {
       throw HttpError(404, "Not found");
     }
     else {
-    res.status(200).json({"message": "contact deleted"});
+    res.status(200).json({"message": "pet deleted"});
     };
 };
 
