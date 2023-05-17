@@ -22,7 +22,7 @@ const userSchema = new Schema({
   },
   Phone: {
     type: String,
-    default: "+38000000000",
+    
   },
   City: {
     type: String,
@@ -42,21 +42,11 @@ const userSchema = new Schema({
 });
 
 const addSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": "missing required name field",
-  }),
-  email: Joi.string().required().messages({
-    "any.required": "missing required email field",
-  }),
-  Birthday: Joi.string().required().messages({
-    "any.required": "missing required phone field",
-  }),
-  phone: Joi.string().required().messages({
-    "any.required": "missing required phone field",
-  }),
-  City: Joi.string().required().messages({
-    "any.required": "missing required phone field",
-  }),
+  name: Joi.string(),
+  email: Joi.string(),
+  Birthday: Joi.string(),
+  phone: Joi.string(),
+  City: Joi.string(),
   favorite: Joi.boolean(),
 });
 
