@@ -7,7 +7,10 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://your-pet.onrender.com/api-docs" }],
+  "servers": [
+    { "url": "https://your-pet.onrender.com/api-docs" },
+    { "url": "https://localhost:3000/api-docs" }
+  ],
   "tags": [
     {
       "name": "Auth",
@@ -125,7 +128,7 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "user object",
-          
+
           "content": {
             "application/json": {
               "schema": {
@@ -470,6 +473,34 @@
           },
           "400": {
             "description": "Uploaded file is too big",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/pets/removeuserpet": {
+      "post": {
+        "tags": ["Pets"],
+        "summary": "Remove User Pet",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Pet's ID for Remove",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveUserPetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Pet deleted"
+          },
+          "404": {
+            "description": "Not found",
             "content": {}
           }
         }
@@ -938,7 +969,7 @@
           }
         }
       },
-      "deleteuserpetRequest": {
+      "removeuserpet": {
         "type": "array",
         "items": {
           "type": "object",
@@ -1053,12 +1084,7 @@
       },
       "AddUserPetRequest": {
         "type": "object",
-        "required": [
-          "category",
-          "namePet",
-          "dateOfBirth",
-          "breed"
-        ],
+        "required": ["category", "namePet", "dateOfBirth", "breed"],
         "properties": {
           "category": {
             "type": "string",
@@ -1089,7 +1115,50 @@
             "type": "string",
             "description": "Comments of User's pet "
           }
-         
+        }
+      },
+      "AddUserPetResponse": {
+        "type": "object",
+        "required": ["category", "namePet", "dateOfBirth", "breed"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of User's pet "
+          }
+        }
+      },
+      "RemoveUserPetRequest": {
+        "type": "string",
+        "properties": {
+          "Pet's ID": {
+            "type": "string",
+            "description": "Pet's ID for Remove"
+          }
         }
       }
     },
