@@ -7,7 +7,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://yourpet-backend.onrender.com/api" }],
+  "servers": [{ "url": "https://your-pet.onrender.com/api" }],
   "tags": [
     {
       "name": "Auth",
@@ -105,6 +105,31 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/LogoutRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logout success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/auth/users/update/:id": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User change",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "user object",
+          
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
               }
             }
           }
