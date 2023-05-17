@@ -435,6 +435,45 @@
           }
         }
       }
+    },
+    "/user/pets/adduserpet": {
+      "post": {
+        "tags": ["Pets"],
+        "summary": "Add User Pet",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Pet's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddUserPetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddUserPetResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This pet allready added",
+            "content": {}
+          },
+          "400": {
+            "description": "Uploaded file is too big",
+            "content": {}
+          }
+        }
+      }
     }
   },
 
@@ -449,7 +488,8 @@
           "dateOfBirth",
           "breed",
           "sex",
-          "location"
+          "location",
+          "image"
         ],
         "properties": {
           "category": {
@@ -480,6 +520,10 @@
           "location": {
             "type": "string",
             "description": "Location of Notice "
+          },
+          "image": {
+            "type": "file",
+            "description": "Pet's Avatar "
           },
           "comments": {
             "type": "string",
@@ -1005,6 +1049,47 @@
             "type": "array",
             "description": "User's Changed Favorite Notices "
           }
+        }
+      },
+      "AddUserPetRequest": {
+        "type": "object",
+        "required": [
+          "category",
+          "namePet",
+          "dateOfBirth",
+          "breed"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Category of Notices-pet",
+            "format": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of Notice"
+          },
+          "namePet": {
+            "type": "string",
+            "description": "Name of Pet"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "description": "Pet's Date of Birth"
+          },
+          "breed": {
+            "type": "string",
+            "description": "Pet breed"
+          },
+          "sex": {
+            "type": "string",
+            "description": "Sex of the Pet "
+          },
+          "comments": {
+            "type": "string",
+            "description": "Comments of User's pet "
+          }
+         
         }
       }
     },
