@@ -26,13 +26,12 @@ router.get("/users/current", authenticate, ctrl.getCurrent);
 
 router.post("/users/logout", authenticate, ctrl.logout);
 
-// router.patch(
-//   "/users/avatars",
-//   authenticate,
-//   upload.single("avatar"),
-//   ctrl.updateAvatar
-// );
-
+router.put(
+  "/users/update/:id",
+  authenticate,
+  validateBody(schemas.addSchema),
+  ctrl.updateUserById
+);
 
 
 module.exports = router;

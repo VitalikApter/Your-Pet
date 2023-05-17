@@ -44,53 +44,28 @@ const register = async (req, res) => {
   });
 };
 
-// const login = async (req, res) => {
-//   const { email, password } = req.body;
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     throw HttpError(401, "Email or password invalid");
-//   }
-
-//   const passwordCompare = await bcrypt.compare(password, user.password);
-//   if (!passwordCompare) {
-//     throw HttpError(401, "Email or password invalid");
-//   }
-
-//   const payload = {
-//     id: user._id,
-//   };
-
-//   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-//   await User.findByIdAndUpdate(user._id, { token });
-//   await User.findByIdAndUpdate(user._id, { token });
-
-//   res.json({
-//     token,
-//   });
-// };
-
-const login = async(req, res) => {
-  const {email, password} = req.body;
-  const user = await User.findOne({email});
-  if(!user) {
-      throw HttpError(401, "Email or password invalid");
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password invalid");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
-  if(!passwordCompare) {
-      throw HttpError(401, "Email or password invalid");
+  if (!passwordCompare) {
+    throw HttpError(401, "Email or password invalid");
   }
 
   const payload = {
-      id: user._id,
-  }
+    id: user._id,
+  };
 
-  const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
-  await User.findByIdAndUpdate(user._id, {token});
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-      token,
-  })
-}
+    token,
+  });
+};
 
 const getCurrent = async (req, res) => {
   const { name, email } = req.user;
@@ -130,10 +105,20 @@ const updateAvatar = async (req, res) => {
   res.json({ avatarURL });
 };
 
+const updateUserById = async (req, res) => {
+  const { id } = req.params;
+  const result = await User.findByIdAndUpdate(id, req.body, {new:true});
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
+  updateUserById: ctrlWrapper(updateUserById)
 };
