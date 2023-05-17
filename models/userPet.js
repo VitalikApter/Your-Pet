@@ -32,6 +32,7 @@ const userPetSchema = Schema({
     },
     petAvatar: {
       type: String,
+      default: "",
     },
 }, {versionKey: false});
 

@@ -10,8 +10,20 @@ const addNotice = async (req, res) => {
       return res.status(400).json({"message": error.message});
     };
     const maxSizeOfAvatar = 3145728;
-    if(req.file.size > maxSizeOfAvatar){
-      return res.status(400).json({"message": "Uploaded file is too big"});
+    if(req.file){
+      if(req.file.size > maxSizeOfAvatar){
+        return res.status(400).json({"message": "Uploaded file is too big"});
+      }
+      const {title}  = req.body;
+      const nameCheck = await Notice.findOne({title: title});
+      if(nameCheck) {
+        throw HttpError(409, "This title is already added");
+      }
+      else {
+      const {_id: ownerNotice} = req.user;
+      const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path});
+      res.status(201).json(result);
+      }
     }
     const {title}  = req.body;
     const nameCheck = await Notice.findOne({title: title});
@@ -20,7 +32,7 @@ const addNotice = async (req, res) => {
     }
     else {
     const {_id: ownerNotice} = req.user;
-    const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path});
+    const result = await Notice.create({...req.body, ownerNotice});
     res.status(201).json(result);
     }
 };
