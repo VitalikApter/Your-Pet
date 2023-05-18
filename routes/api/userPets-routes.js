@@ -7,6 +7,6 @@ const uploadCloud = require("../../middlewares/uploadMiddleware");
 
 router.post("/adduserpet", authenticate, uploadCloud.single("image"), ctrl.addUserPet);
 router.delete("/removeuserpet/:id", authenticate, isValidId, ctrl.deleteUserPet);
-router.get("/getAllUserPets", ctrl.getAllUserPets);
+router.get("/getAllUserPets", authenticate, ctrl.getAllUserPets);
 
 module.exports = router;

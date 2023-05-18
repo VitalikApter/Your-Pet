@@ -446,6 +446,45 @@
         }
       }
     },
+    "/user/pets/getAllUserPets": {
+      "post": {
+        "tags": ["Pets"],
+        "summary": "Get User With Pets",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "User with Pets",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/getAllUserPetsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAllUserPetsResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "This pet allready added",
+            "content": {}
+          },
+          "400": {
+            "description": "Uploaded file is too big",
+            "content": {}
+          }
+        }
+      }
+    },
     "/user/pets/adduserpet": {
       "post": {
         "tags": ["Pets"],
@@ -1090,6 +1129,89 @@
           "favorite": {
             "type": "array",
             "description": "User's Changed Favorite Notices "
+          }
+        }
+      },
+      "getAllUserPetsRequest": {
+        "type": "string",
+        "required": " token",
+        "properties": {
+          "Token": {
+            "type": "string",
+            "description": "User_Token"
+          }
+        }
+      },
+      "getAllUserPetsResponse":{
+        "type": "object",
+        "properties": {
+          "user": {
+            "type":"object",
+            "items":{
+              "name": {
+                "type": "string",
+                "description": "User Name",
+                "format": "string"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "Birthday": {
+                "type": "string",
+                "description": "User's Birthday"
+              },
+              "Phone": {
+                "type": "string",
+                "description": "User's Phone"
+              },
+              "City": {
+                "type": "string",
+                "description": "User's Location"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's Avatar URL "
+              },
+              "location": {
+                "type": "string",
+                "description": "Location of Notice "
+              },
+              "favorite": {
+                "type": "array",
+                "description": "User's Changed Favorite Notices "
+              }
+            }
+          },
+          "pets": {
+            "type":"object",
+            "items":{
+              "petAvatar": {
+                "type":"string"
+              },
+              "_id": {
+                "type":"string"
+              },
+              "namePet": {
+                "type":"string"
+              },
+              "dateOfBirth": {
+                "type":"string"
+              },
+              "breed": {
+                "type":"string"
+              },
+              "category": {
+                "type":"string"
+              },
+              "comments": {
+                "type":"string"
+              },
+              "ownerPet": {
+                "type":"string"
+              }
+            }
           }
         }
       },

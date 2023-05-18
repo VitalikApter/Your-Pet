@@ -1,5 +1,6 @@
 const { ctrlWrapper } = require("../utils");
 const { UserPet } = require("../models/userPet");
+const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { addUserPetValidation } = require("../models/userPet");
 
@@ -51,11 +52,20 @@ const deleteUserPet = async (req, res) => {
 
 // Test
 const getAllUserPets = async (req, res) => {
-  const result = await UserPet.find({category: "your pet"})
-  if(!result){
-    throw HttpError(404, "Not found");
-  }
-  res.status(200).json(result)
+    const user = req.user;
+    const userInfo = await User.find({_id: user})
+    
+    if(!userInfo) {
+      throw HttpError(404, "Not found");
+    };
+    const userPets = await UserPet.find({ownerPet: user});
+    if(!userPets) {
+      throw HttpError(404, "Not found");
+    };
+   
+    const userWithPets = {userInfo, userPets};
+  
+    res.status(201).json(userWithPets)
 };
 
 module.exports = {
