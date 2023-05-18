@@ -2,15 +2,7 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
-const fs = require("fs/promises");
-
-const path = require("path");
-
-const jimp = require("jimp");
-
 const { SECRET_KEY } = process.env;
-
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const { ctrlWrapper } = require("../utils");
 
@@ -28,9 +20,16 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
+  const maxSizeOfAvatar = 3145728;
+  if (req.file) {
+    if (req.file.size > maxSizeOfAvatar) {
+      return res.status(400).json({ message: "Uploaded file is too big" });
+    }
+  }
+
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const avatarURL = "../Photo default.png";
+  const avatarURL = req.file.path;
 
   const result = await User.create({
     ...req.body,
@@ -67,8 +66,6 @@ const login = async (req, res) => {
   });
 };
 
-
-
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
@@ -79,20 +76,16 @@ const logout = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, filename } = req.file;
 
-  const avatarName = `${_id}_${filename}`;
-  const resultUpload = path.join(avatarsDir, avatarName);
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", avatarName);
-  await jimp
-    .read(filename)
-    .then((image) => {
-      image.resize(250, 250);
-    })
-    .catch(() => {
-      throw HttpError(400, "Something wrong with image...");
-    });
+  const maxSizeOfAvatar = 3145728;
+  if (req.file) {
+    if (req.file.size > maxSizeOfAvatar) {
+      return res.status(400).json({ message: "Uploaded file is too big" });
+    }
+  }
+
+  const avatarURL = req.file.path;
+
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({ avatarURL });
@@ -100,7 +93,7 @@ const updateAvatar = async (req, res) => {
 
 const updateUserById = async (req, res) => {
   const { id } = req.params;
-  const result = await User.findByIdAndUpdate(id, req.body, {new:true});
+  const result = await User.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -112,5 +105,5 @@ module.exports = {
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
-  updateUserById: ctrlWrapper(updateUserById)
+  updateUserById: ctrlWrapper(updateUserById),
 };
