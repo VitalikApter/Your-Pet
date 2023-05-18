@@ -251,7 +251,14 @@
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "User's id",
-          "required": true
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/userfavoritenoticesRequest"
+              }
+            }
+          }
         },
         "responses": {
           "200": {
@@ -561,6 +568,10 @@
             "description": "Comments of Notice "
           }
         }
+      },
+      "userfavoritenoticesRequest": {
+        "type": "string",
+        "required": "User's ID"
       },
       "NoticeResponse": {
         "type": "object",
