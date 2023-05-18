@@ -447,13 +447,13 @@
       }
     },
     "/user/pets/getAllUserPets": {
-      "post": {
+      "get": {
         "tags": ["Pets"],
         "summary": "Get User With Pets",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "User with Pets",
+          "description": "User's Token",
           "required": true,
           "content": {
             "application/json": {
