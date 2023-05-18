@@ -120,7 +120,7 @@
         }
       }
     },
-    "/auth/users/update/:id": {
+    "/auth/users/update/{id}": {
       "post": {
         "tags": ["Auth"],
         "summary": "User change",
@@ -313,7 +313,7 @@
         }
       }
     },
-    "/notices/:id": {
+    "/notices/{id}": {
       "get": {
         "tags": ["Notices"],
         "summary": "Notice by id",
@@ -348,7 +348,7 @@
         }
       }
     },
-    "/notices/removenoticefromfavorite/:id": {
+    "/notices/removenoticefromfavorite/{id}": {
       "delete": {
         "tags": ["Notices"],
         "summary": "Delete favorite Notice by id",
@@ -383,7 +383,7 @@
         }
       }
     },
-    "notices/removeuserpet/:id": {
+    "notices/removeuserpet/{id}": {
       "delete": {
         "tags": ["Notices"],
         "summary": "Delete Notice CreatedByUser",
@@ -411,7 +411,7 @@
         }
       }
     },
-    "/notices/addnoticetofavorite/:id": {
+    "/notices/addnoticetofavorite/{id}": {
       "post": {
         "tags": ["Notices"],
         "summary": "Add Notice To Favorite",
