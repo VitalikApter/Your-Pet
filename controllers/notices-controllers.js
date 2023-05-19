@@ -70,29 +70,32 @@ const deleteNoticeCreatedByUser = async (req, res) => {
   };
 };
 
-const getNoticesByCategory = async (req, res) => {
-    // sell = sell
-    // in good hands = in%20good%20hands - пробел = %20
-    // lost/found = lost%2Ffound - слєш = %2F
-    // ?category=
-    const { category: categoryNotice } = req.query;
+const getNoticesBySearchOrCategory = async (req, res) => {
+  const { search: titleNotice, category: categoryNotice } = req.query;
+  if(titleNotice) {
+    const result = await Notice.find({title: titleNotice});
+    if(JSON.stringify(result) === "[]") {
+    throw HttpError(404, "Not Found");
+    }
+    res.status(200).json(result)
+  }
+  else if(categoryNotice) {
     const result = await Notice.find({category: categoryNotice});
-    if (JSON.stringify(result) === "[]") {
+    if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
-    }
-    else{
-      res.status(200).json(result);
-    }
-};
-
-const getNoticesByTitle = async (req, res) => {
-    // /search?title=
-    const { title: titleNotice } = req.query;
-    const result = await Notice.find({title: titleNotice})
-    if (JSON.stringify(result) === "[]") {
+      }
+      res.status(200).json(result)
+  }
+  else if(titleNotice && categoryNotice) {
+    const result = await Notice.find({category: categoryNotice, title: titleNotice});
+    if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
-    }
-    res.status(200).json(result);
+      }
+      res.status(200).json(result)
+  }
+  else if(!titleNotice && !categoryNotice) {
+    throw HttpError(404, "Not Found");
+  };
 };
 
 const addNoticeToFavorite = async (req, res) => {
@@ -108,7 +111,10 @@ const addNoticeToFavorite = async (req, res) => {
     const result = await User.findById(_id)
     res.status(201).json(result);
   }
-  throw HttpError(409, "This notice is already added to favorite");
+  else{
+    throw HttpError(409, "This notice is already added to favorite");
+  }
+
 };
 
 const getNoticesAddedToFavoriteByUser = async (req, res) => {
@@ -135,8 +141,7 @@ const deleteNoticeFromFavorite = async (req, res) => {
 
 module.exports = {
     addNotice: ctrlWrapper(addNotice),
-    getNoticesByCategory: ctrlWrapper(getNoticesByCategory),
-    getNoticesByTitle: ctrlWrapper(getNoticesByTitle),
+    getNoticesBySearchOrCategory: ctrlWrapper(getNoticesBySearchOrCategory),
     getNoticeById: ctrlWrapper(getNoticeById),
     getNoticesСreatedByUser: ctrlWrapper(getNoticesСreatedByUser),
     deleteNoticeCreatedByUser: ctrlWrapper(deleteNoticeCreatedByUser),
