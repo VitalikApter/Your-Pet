@@ -21,7 +21,8 @@ const addNotice = async (req, res) => {
       }
       else {
       const {_id: ownerNotice} = req.user;
-      const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path});
+      await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path});
+      const result = Notice.findById(ownerNotice);
       res.status(201).json(result);
       }
     }
@@ -74,14 +75,14 @@ const getNoticesBySearchOrCategory = async (req, res) => {
   const { search: titleNotice, category: categoryNotice } = req.query;
   const {page, limit} = req.query;
   const skip = (page - 1 ) * limit; 
-  if(titleNotice) {
-    const result = await Notice.find({ title: titleNotice}, "", {skip, limit})
+  if(titleNotice && !categoryNotice) {
+    const result = await Notice.find({ title: { $regex: titleNotice, $options: 'i' }}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
     throw HttpError(404, "Not Found");
     }
     res.status(200).json(result);
   }
-  else if(categoryNotice) {
+  else if(categoryNotice && !titleNotice) {
     const result = await Notice.find({category: categoryNotice}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
@@ -89,7 +90,7 @@ const getNoticesBySearchOrCategory = async (req, res) => {
       res.status(200).json(result);
   }
   else if(titleNotice && categoryNotice) {
-    const result = await Notice.find({category: categoryNotice, title: titleNotice}, "", {skip, limit});
+    const result = await Notice.find({category: categoryNotice, title: { $regex: titleNotice, $options: 'i' }}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
       }
