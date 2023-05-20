@@ -65,7 +65,7 @@ const getAllUserPets = async (req, res) => {
 
   const userWithPets = { userInfo, userPets };
 
-  res.status(201).json(userWithPets);
+  res.status(200).json(userWithPets);
 };
 
 module.exports = {

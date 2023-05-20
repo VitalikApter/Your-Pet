@@ -7,7 +7,7 @@ const { validateBody } = require("../../utils");
 const { authenticate } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
-const uploadCloud = require("../../middlewares/uploadMiddleware");
+// const uploadCloud = require("../../middlewares/uploadMiddleware");
 
 const router = express.Router();
 
@@ -15,7 +15,6 @@ const router = express.Router();
 router.post(
   "/users/register",
   validateBody(schemas.registerSchema),
-  uploadCloud.single("image"),
   ctrl.register
 );
 
@@ -31,6 +30,8 @@ router.put(
   ctrl.updateUserById
 );
 
-router.patch("/users/avatars", authenticate, uploadCloud.single("image"), ctrl.updateAvatar)
+router.get("/users/newtoken/:id", authenticate, ctrl.refreshToken);
+
+// router.patch("/users/avatars", authenticate, uploadCloud.single("image"), ctrl.updateAvatar)
 
 module.exports = router;

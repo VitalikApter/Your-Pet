@@ -20,21 +20,20 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
 
-  const maxSizeOfAvatar = 3145728;
-  if (req.file) {
-    if (req.file.size > maxSizeOfAvatar) {
-      return res.status(400).json({ message: "Uploaded file is too big" });
-    }
-  }
+  // const maxSizeOfAvatar = 3145728;
+  // if (req.file) {
+  //   if (req.file.size > maxSizeOfAvatar) {
+  //     return res.status(400).json({ message: "Uploaded file is too big" });
+  //   }
+  // }
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const avatarURL = req.file.path;
+  // const avatarURL = req.file.path;
 
   const result = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarURL,
   });
 
   res.status(201).json({
@@ -66,6 +65,25 @@ const login = async (req, res) => {
   });
 };
 
+const refreshToken = async (req, res) => {
+  const user = req.user;
+  const userInfo = await User.find({ _id: user });
+
+  if (!userInfo) {
+    throw HttpError(404, "Not found");
+  }
+
+  const payload = {
+    id: user._id,
+  };
+
+  const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "720h" });
+
+  res.json({
+    refreshToken,
+  });
+};
+
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
@@ -77,6 +95,8 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
 
+  const { avatarURL } = req.file;
+
   const maxSizeOfAvatar = 3145728;
   if (req.file) {
     if (req.file.size > maxSizeOfAvatar) {
@@ -84,9 +104,7 @@ const updateAvatar = async (req, res) => {
     }
   }
 
-  const avatarURL = req.file.path;
-
-  await User.findByIdAndUpdate(_id, { avatarURL });
+  await User.findByIdAndUpdate(_id, { avatarURL: req.file.path });
 
   res.json({ avatarURL });
 };
@@ -106,4 +124,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   updateUserById: ctrlWrapper(updateUserById),
+  refreshToken: ctrlWrapper(refreshToken),
 };
