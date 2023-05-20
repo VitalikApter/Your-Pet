@@ -72,26 +72,28 @@ const deleteNoticeCreatedByUser = async (req, res) => {
 
 const getNoticesBySearchOrCategory = async (req, res) => {
   const { search: titleNotice, category: categoryNotice } = req.query;
+  const {page, limit} = req.query;
+  const skip = (page - 1 ) * limit; 
   if(titleNotice) {
-    const result = await Notice.find({title: titleNotice});
+    const result = await Notice.find({ title: titleNotice}, "", {skip, limit})
     if(JSON.stringify(result) === "[]") {
     throw HttpError(404, "Not Found");
     }
-    res.status(200).json(result)
+    res.status(200).json(result);
   }
   else if(categoryNotice) {
-    const result = await Notice.find({category: categoryNotice});
+    const result = await Notice.find({category: categoryNotice}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
       }
-      res.status(200).json(result)
+      res.status(200).json(result);
   }
   else if(titleNotice && categoryNotice) {
-    const result = await Notice.find({category: categoryNotice, title: titleNotice});
+    const result = await Notice.find({category: categoryNotice, title: titleNotice}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
       }
-      res.status(200).json(result)
+      res.status(200).json(result);
   }
   else if(!titleNotice && !categoryNotice) {
     throw HttpError(404, "Not Found");

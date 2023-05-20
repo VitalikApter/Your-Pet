@@ -51,7 +51,6 @@ const deleteUserPet = async (req, res) => {
   }
 };
 
-// Test
 const getAllUserPets = async (req, res) => {
   const user = req.user;
   const userInfo = await User.find({ _id: user });
