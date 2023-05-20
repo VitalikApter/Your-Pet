@@ -383,7 +383,7 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Notices object",
+          "description": "Notices ID",
           "required": true,
           "content": {
             "application/json": {
@@ -945,49 +945,13 @@
         }
       },
       "AddNoticeToFavoriteRequest": {
-        "type": "object",
-        "required": [
-          "category",
-          "title",
-          "namePet",
-          "dateOfBirth",
-          "breed",
-          "sex",
-          "location"
-        ],
+        "type": "string",
+        
         "properties": {
-          "category": {
+          "Notice's ID": {
             "type": "string",
-            "description": "Category of Notices-pet",
+            "description": "ID of Notice",
             "format": "string"
-          },
-          "title": {
-            "type": "string",
-            "description": "Title of Notice"
-          },
-          "namePet": {
-            "type": "string",
-            "description": "Name of Pet"
-          },
-          "dateOfBirth": {
-            "type": "string",
-            "description": "Pet's Date of Birth"
-          },
-          "breed": {
-            "type": "string",
-            "description": "Pet breed"
-          },
-          "sex": {
-            "type": "string",
-            "description": "Sex of the Pet "
-          },
-          "location": {
-            "type": "string",
-            "description": "Location of Notice "
-          },
-          "comments": {
-            "type": "string",
-            "description": "Comments of Notice "
           }
         }
       },
@@ -1033,6 +997,10 @@
           "location": {
             "type": "string",
             "description": "Location of Notice "
+          },
+          "price": {
+            "type": "string",
+            "description": "Price of Notice "
           },
           "favorite": {
             "type": "array",
