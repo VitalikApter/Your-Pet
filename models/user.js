@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-
 const { handleMongooseError } = require("../utils");
 
 const userSchema = new Schema({
   name: {
     type: String,
+    default: ""
   },
   password: {
     type: String,
@@ -18,14 +18,15 @@ const userSchema = new Schema({
   },
   Birthday: {
     type: String,
-    default: "00.00.0000",
+    default: "",
   },
   Phone: {
     type: String,
-    default: "380000000"
+    default: ""
   },
   City: {
     type: String,
+    default: "",
   },
   token: {
     type: String,
