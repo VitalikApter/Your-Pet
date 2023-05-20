@@ -180,7 +180,7 @@
         }
       }
     },
-    "/notices/": {
+    "/notices?": {
       "get": {
         "tags": ["Notices"],
         "summary": "needs to be passed: or consequences- `category` (1 of 3) - sell, in %20good%20hands, lost%2Ffoundor title - `search` or title `search` + descriptions `category`",
