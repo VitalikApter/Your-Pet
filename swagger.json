@@ -23,6 +23,14 @@
     {
       "name": "Pets",
       "description": "Pets endpoints"
+    },
+    {
+      "name": "Services-Sidebar",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "News",
+      "description": "Authorization endpoints"
     }
   ],
 
@@ -516,6 +524,62 @@
           }
         }
       }
+    },
+    "/friends": {
+      "get": {
+        "tags": ["Services-Sidebar"],
+        "summary": "Get Friends",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/friendsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Uploaded file is too big",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "tags": ["News"],
+        "summary": "Get News",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          },
+          "400": {
+            "description": "Uploaded file is too big",
+            "content": {}
+          }
+        }
+      }
     }
   },
 
@@ -946,7 +1010,7 @@
       },
       "AddNoticeToFavoriteRequest": {
         "type": "string",
-        
+
         "properties": {
           "Notice's ID": {
             "type": "string",
@@ -1018,12 +1082,12 @@
           }
         }
       },
-      "getAllUserPetsResponse":{
+      "getAllUserPetsResponse": {
         "type": "object",
         "properties": {
           "user": {
-            "type":"object",
-            "items":{
+            "type": "object",
+            "items": {
               "name": {
                 "type": "string",
                 "description": "User Name",
@@ -1061,31 +1125,31 @@
             }
           },
           "pets": {
-            "type":"object",
-            "items":{
+            "type": "object",
+            "items": {
               "petAvatar": {
-                "type":"string"
+                "type": "string"
               },
               "_id": {
-                "type":"string"
+                "type": "string"
               },
               "namePet": {
-                "type":"string"
+                "type": "string"
               },
               "dateOfBirth": {
-                "type":"string"
+                "type": "string"
               },
               "breed": {
-                "type":"string"
+                "type": "string"
               },
               "category": {
-                "type":"string"
+                "type": "string"
               },
               "comments": {
-                "type":"string"
+                "type": "string"
               },
               "ownerPet": {
-                "type":"string"
+                "type": "string"
               }
             }
           }
@@ -1167,6 +1231,81 @@
           "Pet's ID": {
             "type": "string",
             "description": "Pet's ID for Remove"
+          }
+        }
+      },
+      "friendsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of Friend"
+              
+            },
+            "url": {
+              "type": "string",
+              "description": "URL of Friend"
+            },
+            "addressUrl": {
+              "type": "string",
+              "description": "Adress GPS of Friend"
+            },
+            "imageUrl": {
+              "type": "string",
+              "description": "Logo of Friend"
+            },
+            "address": {
+              "type": "string",
+              "description": "Adress of Friend"
+            },
+            "workDays": {
+              "type": "string",
+              "description": "Friend's working days  "
+            },
+            "phone": {
+              "type": "string",
+              "description": "Friend's phone"
+              
+            },
+            "email": {
+              "type": "string",
+              "description": "Friend's email  "
+            }
+          }
+        }
+      },
+      "NewsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "imgUrl": {
+              "type": "string",
+              "description": "Logo of New"
+              
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of New"
+            },
+            "text": {
+              "type": "string",
+              "description": "News text "
+            },
+            "date": {
+              "type": "string",
+              "description": "News date"
+            },
+            "url": {
+              "type": "string",
+              "description": "News URL"
+            },
+            "id": {
+              "type": "string",
+              "description": "News Id"
+            }
           }
         }
       }
