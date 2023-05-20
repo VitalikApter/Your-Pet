@@ -1,11 +1,7 @@
 const bcrypt = require("bcryptjs");
-
 const jwt = require("jsonwebtoken");
-
 const { SECRET_KEY } = process.env;
-
 const { ctrlWrapper } = require("../utils");
-
 const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 
@@ -15,21 +11,10 @@ const register = async (req, res) => {
     throw new HttpError(400, "Email and password are required");
   }
   const user = await User.findOne({ email });
-
   if (user) {
     throw HttpError(409, "Email in use");
   }
-
-  // const maxSizeOfAvatar = 3145728;
-  // if (req.file) {
-  //   if (req.file.size > maxSizeOfAvatar) {
-  //     return res.status(400).json({ message: "Uploaded file is too big" });
-  //   }
-  // }
-
   const hashPassword = await bcrypt.hash(password, 10);
-
-  // const avatarURL = req.file.path;
 
   const result = await User.create({
     ...req.body,
@@ -92,23 +77,6 @@ const logout = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-
-  const { avatarURL } = req.file;
-
-  const maxSizeOfAvatar = 3145728;
-  if (req.file) {
-    if (req.file.size > maxSizeOfAvatar) {
-      return res.status(400).json({ message: "Uploaded file is too big" });
-    }
-  }
-
-  await User.findByIdAndUpdate(_id, { avatarURL: req.file.path });
-
-  res.json({ avatarURL });
-};
-
 const updateUserById = async (req, res) => {
   const { id } = req.params;
   const result = await User.findByIdAndUpdate(id, req.body, { new: true });
@@ -116,6 +84,24 @@ const updateUserById = async (req, res) => {
     throw HttpError(404, `Not found`);
   }
   res.json(result);
+};
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const maxSizeOfAvatar = 3145728;
+  if (req.file) {
+    if (req.file.size > maxSizeOfAvatar) {
+      return res.status(400).json({ message: "Uploaded file is too big" });
+    }
+    await User.findByIdAndUpdate(_id, { avatarURL: req.file.path });
+    const result = await User.findById(_id);
+    return res.status(201).json(result);
+  }
+  else if (!req.file) {
+    return res.status(400).json({ message: "Cannot find a file to upload" });
+  }
+    
+  
 };
 
 module.exports = {
