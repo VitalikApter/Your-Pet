@@ -2,7 +2,6 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const {handleMongooseError} = require("../utils");
 
-
 const userPetSchema = Schema({
     namePet: {
       type: String,
