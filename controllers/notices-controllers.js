@@ -75,14 +75,14 @@ const getNoticesBySearchOrCategory = async (req, res) => {
   const { search: titleNotice, category: categoryNotice } = req.query;
   const {page, limit} = req.query;
   const skip = (page - 1 ) * limit; 
-  if(titleNotice) {
+  if(titleNotice && !categoryNotice) {
     const result = await Notice.find({ title: { $regex: titleNotice, $options: 'i' }}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
     throw HttpError(404, "Not Found");
     }
     res.status(200).json(result);
   }
-  else if(categoryNotice) {
+  else if(categoryNotice && !titleNotice) {
     const result = await Notice.find({category: categoryNotice}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
       throw HttpError(404, "Not Found");
