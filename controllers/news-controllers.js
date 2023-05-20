@@ -3,7 +3,10 @@ const { HttpError } = require("../helpers");
 const { News } = require("../models/news");
 
 const getAllNews = async (req, res) => {
-    const result = await News.find();
+    const {page} = req.query;
+    const limit = 6;
+    const skip = (page - 1 ) * limit;
+    const result = await News.find({}, "", {skip, limit});
     if(JSON.stringify(result) === "[]") {
         throw HttpError(404, "Not found");
     }
