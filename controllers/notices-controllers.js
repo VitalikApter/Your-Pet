@@ -125,8 +125,15 @@ const getNoticesAddedToFavoriteByUser = async (req, res) => {
   const result = await User.findById({_id});
   if (!result) {
     throw HttpError(404, `Not found`);
-  }
-  res.status(200).json(result.favorite)
+  };
+  const allFavoriteNotices = result.favorite;
+  const data = [];
+  for (let i = 0; i < allFavoriteNotices.length; i++) {
+    const currentNotice = allFavoriteNotices[i];
+    const getNoticeById = await Notice.findById({_id: currentNotice});
+    data.push(getNoticeById);
+  };
+  res.status(200).json(data);
 };
 
 const deleteNoticeFromFavorite = async (req, res) => {

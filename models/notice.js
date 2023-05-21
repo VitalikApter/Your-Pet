@@ -48,7 +48,7 @@ const noticeSchema = Schema({
     },
     noticeAvatar: {
       type: String,
-      default: "",
+      required: true,
     },
 }, {versionKey: false});
 
