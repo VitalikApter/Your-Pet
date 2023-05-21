@@ -1,5 +1,4 @@
 const { ctrlWrapper } = require("../utils");
-const { HttpError } = require("../helpers");
 const { News } = require("../models/news");
 
 const getAllNews = async (req, res) => {
@@ -8,9 +7,6 @@ const getAllNews = async (req, res) => {
     const skip = (currentPage - 1 ) * limit;
     if(searchNews){
         const data = await News.find({title: {$regex: searchNews, $options: 'i' }}, "", {skip, limit});
-        if(JSON.stringify(data) === "[]") {
-            throw HttpError(404, "Not found");
-        }
         const quantityNews = await News.find({title: {$regex: searchNews, $options: 'i' }});
         const totalNews = String(Object.keys(quantityNews).length);
         const total = totalNews / 6;
@@ -19,9 +15,6 @@ const getAllNews = async (req, res) => {
     }
     else {
         const data = await News.find({}, "", {skip, limit});
-        if(JSON.stringify(data) === "[]") {
-            throw HttpError(404, "Not found");
-        }
         const quantityNews = await News.find();
         const totalNews = String(Object.keys(quantityNews).length);
         const total = totalNews / 6;
