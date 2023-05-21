@@ -105,10 +105,12 @@ const updateAvatar = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { token } = req.user;
+  const { email, token } = req.user;
 
   res.json({
+    email,
     token
+    
   });
 };
 
