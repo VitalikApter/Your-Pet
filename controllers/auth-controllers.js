@@ -15,16 +15,14 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-
-  const result = await User.create({
-    ...req.body,
-    password: hashPassword,
-  });
-
-  res.status(201).json({
-    email: result.email,
+  const result = await User.create({...req.body, password: hashPassword });
+  const payload = {
     id: result.id,
-  });
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const updatedToken = await User.findByIdAndUpdate(payload.id, { token: token });
+  const updatedUser = await User.findById(payload.id);
+  res.status(201).json({email: updatedUser.email, token: updatedUser.token});
 };
 
 const login = async (req, res) => {
@@ -106,13 +104,7 @@ const updateAvatar = async (req, res) => {
 
 const getCurrent = async (req, res) => {
   const user = req.user;
-  // const payload = {
-  //   id: user._id,
-  // };
-  // const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "720h" });
-  // const userData = await User.findByIdAndUpdate({_id: payload.id, token: refreshToken})
   res.status(200).json({user})
-
 };
 
 module.exports = {

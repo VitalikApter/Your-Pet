@@ -31,9 +31,15 @@ const addNotice = async (req, res) => {
       throw HttpError(409, "This title is already added");
     }
     else {
-    const {_id: ownerNotice} = req.user;
-    const result = await Notice.create({...req.body, ownerNotice});
-    res.status(201).json(result);
+      const nameCheck = await Notice.findOne({title: title});
+      if(nameCheck) {
+        throw HttpError(409, "This title is already added");
+      }
+      else {
+      const {_id: ownerNotice} = req.user;
+      const result = await Notice.create({...req.body, ownerNotice});
+      res.status(201).json(result);
+      }
     }
   }
 };
