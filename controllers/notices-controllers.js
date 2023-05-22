@@ -5,25 +5,30 @@ const { User } = require("../models/user");
 const { addNoticeValidation } = require("../models/notice");
 
 const addNotice = async (req, res) => {
-    const {title}  = req.body;
-    const {error} = addNoticeValidation.validate(req.body);
-    if(error) {
-      return res.status(400).json({"message": error.message});
-    };
-    const maxSizeOfAvatar = 3145728;
-    if(req.file){
-      if(req.file.size > maxSizeOfAvatar){
-        return res.status(400).json({"message": "Uploaded file is too big"});
-      }
-      const nameCheck = await Notice.findOne({title: title});
-      if(nameCheck) {
-        throw HttpError(409, "This title is already added");
-      }
-      else {
-      const {_id: ownerNotice} = req.user;
-      const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path}); 
-      res.status(201).json(result);
-      }
+  const {title}  = req.body;
+  const {error} = addNoticeValidation.validate(req.body);
+  if(error) {
+    return res.status(400).json({"message": error.message});
+  };
+  const maxSizeOfAvatar = 3145728;
+  if(req.file){
+    if(req.file.size > maxSizeOfAvatar){
+      return res.status(400).json({"message": "Uploaded file is too big"});
+    }
+    const nameCheck = await Notice.findOne({title: title});
+    if(nameCheck) {
+      throw HttpError(409, "This title is already added");
+    }
+    else {
+    const {_id: ownerNotice} = req.user;
+    const result = await Notice.create({...req.body, ownerNotice, noticeAvatar: req.file.path}); 
+    res.status(201).json(result);
+    }
+  }
+  else {
+    const nameCheck = await Notice.findOne({title: title});
+    if(nameCheck) {
+      throw HttpError(409, "This title is already added");
     }
     else {
       const nameCheck = await Notice.findOne({title: title});
@@ -36,6 +41,7 @@ const addNotice = async (req, res) => {
       res.status(201).json(result);
       }
     }
+  }
 };
 
 const getNoticeById = async (req, res) => {
