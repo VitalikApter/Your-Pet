@@ -112,6 +112,7 @@ const getCurrent = async (req, res) => {
   // const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "720h" });
   // const userData = await User.findByIdAndUpdate({_id: payload.id, token: refreshToken})
   res.status(200).json({user})
+
 };
 
 module.exports = {
