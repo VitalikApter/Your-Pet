@@ -191,7 +191,7 @@
     "/notices?": {
       "get": {
         "tags": ["Notices"],
-        "summary": "needs to be passed: or consequences- `category` (1 of 3) - sell, in %20good%20hands, lost%2Ffoundor title - `search` or title `search` + descriptions `category`",
+        "summary": "needs to be passed: or consequences- `category` (1 of 3) - sell, for-free, lost-found or title - `search` or title `search` + descriptions `category`",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -468,7 +468,7 @@
           "description": "Pet's object",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/AddUserPetRequest"
               }
@@ -1157,7 +1157,7 @@
       },
       "AddUserPetRequest": {
         "type": "object",
-        "required": ["category", "namePet", "dateOfBirth", "breed"],
+        "required": ["category", "sex", "namePet", "dateOfBirth", "breed"],
         "properties": {
           "category": {
             "type": "string",
@@ -1187,12 +1187,16 @@
           "comments": {
             "type": "string",
             "description": "Comments of User's pet "
+          },
+          "image":{
+            "type": "file",
+            "description": "Pet Avatar"
           }
         }
       },
       "AddUserPetResponse": {
         "type": "object",
-        "required": ["category", "namePet", "dateOfBirth", "breed"],
+        "required": ["category", "sex","namePet", "dateOfBirth", "breed"],
         "properties": {
           "category": {
             "type": "string",
@@ -1222,7 +1226,12 @@
           "comments": {
             "type": "string",
             "description": "Comments of User's pet "
+          },
+          "image":{
+            "type":"string",
+            "description": "Pet Avatar URL"
           }
+          
         }
       },
       "RemoveUserPetRequest": {
