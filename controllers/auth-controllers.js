@@ -105,13 +105,14 @@ const updateAvatar = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { token } = req.user;
-
-  res.json({
-    token
-  });
+  const user = req.user;
+  // const payload = {
+  //   id: user._id,
+  // };
+  // const refreshToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "720h" });
+  // const userData = await User.findByIdAndUpdate({_id: payload.id, token: refreshToken})
+  res.status(200).json({user})
 };
-
 
 module.exports = {
   register: ctrlWrapper(register),
