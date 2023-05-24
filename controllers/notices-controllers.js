@@ -51,7 +51,7 @@ const getNoticesСreatedByUser = async (req, res) => {
   const {id: ownerNotice} = req.user;
   const result = await Notice.find({ownerNotice: ownerNotice});
   if (JSON.stringify(result) === "[]") {
-    throw HttpError(404, "Not Found");
+    res.status(200).json([]);
   }
   else{
     res.status(200).json(result);
