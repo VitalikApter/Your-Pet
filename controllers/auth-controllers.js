@@ -41,11 +41,9 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(user._id, { token });
+  const result = await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
-    token,
-  });
+  res.status(200).json({result});
 };
 
 const refreshToken = async (req, res) => {
@@ -98,8 +96,6 @@ const updateAvatar = async (req, res) => {
   else if (!req.file) {
     return res.status(400).json({ message: "Cannot find a file to upload" });
   }
-    
-  
 };
 
 const getCurrent = async (req, res) => {
