@@ -27,23 +27,23 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
+  const result = await User.findOne({ email });
+  if (!result) {
     throw HttpError(401, "Email or password invalid");
   }
-  const passwordCompare = await bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, result.password);
   if (!passwordCompare) {
     throw HttpError(401, "Email or password invalid");
   }
 
   const payload = {
-    id: user._id,
+    id: result._id,
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  const result = await User.findByIdAndUpdate(user._id, { token });
-
-  res.status(200).json({result});
+  const updatedUser = await User.findByIdAndUpdate(result._id, { token });
+  const user = await User.findById(result._id);
+  res.status(200).json({token, user});
 };
 
 const refreshToken = async (req, res) => {
