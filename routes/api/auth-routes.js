@@ -12,6 +12,7 @@ router.post("/users/logout", authenticate, ctrl.logout);
 router.get("/users/current", authenticate, ctrl.getCurrent);
 router.put("/users/update/:id", authenticate, validateBody(schemas.addSchema), ctrl.updateUserById);
 router.get("/users/newtoken/:id", authenticate, ctrl.refreshToken);
+router.get("/users/:id", ctrl.getUserById);
 router.patch("/users/updateavatar", authenticate, uploadCloud.single("image"), ctrl.updateAvatar)
 
 module.exports = router;
