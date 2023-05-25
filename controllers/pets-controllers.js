@@ -25,7 +25,8 @@ const addUserPet = async (req, res) => {
         ownerPet,
         petAvatar: req.file.path,
       });
-      res.status(201).json(result);
+      const data = await UserPet.findById(result._id)
+      res.status(201).json(data);
     }
   }
   const { namePet } = req.body;
