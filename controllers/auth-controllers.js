@@ -103,6 +103,17 @@ const getCurrent = async (req, res) => {
   res.status(200).json({user})
 };
 
+const getUserById = async (req, res) => {
+  const {id} = req.params;
+  const result = await User.findById(id);
+  if(!result){
+    throw HttpError(404, `Not found`);
+  }
+  const email = result.email;
+  const phone = result.Phone;
+  res.status(200).json({email, phone});
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
@@ -111,4 +122,5 @@ module.exports = {
   updateUserById: ctrlWrapper(updateUserById),
   refreshToken: ctrlWrapper(refreshToken),
   getCurrent: ctrlWrapper(getCurrent),
+  getUserById: ctrlWrapper(getUserById),
 };
