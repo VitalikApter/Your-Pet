@@ -42,7 +42,7 @@ YourPet Backend API будується за допомогою таких інс
 
 ## Клонувати репазиторій
 
-Щоб клонувати репозиторій YourPet Backend API, скористайтеся одним із наведених нижче посилань:
+Щоб клонувати репозиторій YourPet Backend API, скористайтеся наведеним нижче посиланням:
 
 - HTTPS: `https://github.com/VitalikApter/Your-Pet.git`
 
